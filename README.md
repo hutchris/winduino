@@ -12,6 +12,7 @@ Files:
  - Config file to site beside python script. Contains an API key for http://openweathermap.org and city id. JSON format.
 - winduino.ino
  - Sketch file to be uploaded to the Arduino by the IDE.
+
 Physical:
 - Arduino Yun device
 - 3D printed casing. Purchase here: http://shpws.me/OfC3
