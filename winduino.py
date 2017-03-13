@@ -3,6 +3,7 @@ import json
 import time
 import urllib2
 
+#add arduino bridge module to sys path
 sys.path.insert(0, '/usr/lib/python2.7/bridge/')
 from bridgeclient import BridgeClient
 
@@ -21,10 +22,8 @@ while resp != 200 and count < 4:
 	try:
 		urlobj = urllib2.urlopen(url)
 		resp = urlobj.getcode()
-	except urllib2.HTTPError, err:
-		resp = err.code
 	except:
-		time.sleep(10)
+		pass
 	if resp != 200:
 		time.sleep(10)
 		count += 1
@@ -32,4 +31,12 @@ while resp != 200 and count < 4:
 if resp == 200:
 	weatherData = json.loads(urlobj.read())
 	windDir = weatherData['wind']['deg']
+else:
+	windDir = -1
+
+#creates a bridge object
+bricli = BridgeClient()
+
+#Pass variables to the bridge memory
+bricli.put('windDir',windDir)
 
