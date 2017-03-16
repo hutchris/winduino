@@ -44,7 +44,7 @@ def numberOfSteps(previous,current):
 			steps = steps - (2 * steps)
 	else:
 		steps = diff
-	steps = int(steps * (360.0/512.0))
+	steps = int(steps * (512.0/360.0))
 	return(steps)
 
 if resp == 200:
