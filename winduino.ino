@@ -8,11 +8,13 @@ int pin2 = 11;
 int pin3 = 10;
 int pin4 = 9;
 
-//This declares a variable for the bridge values, passed from python
-char windDir[10];
+//This declares a variable for the value, passed from python
+char steps[4];
+char windDir[4];
+
 
 //This declares the variable to hold previous position
-int prev_windDir_int = 0;
+char prev_windDir[4] = "0";
 
 //Creates a motor object. Steps per rev, pins.
 Stepper motor(512, pin1, pin2, pin3, pin4);
@@ -26,6 +28,7 @@ void setup() {
   pinMode(pin2, OUTPUT);
   pinMode(pin3, OUTPUT);
   pinMode(pin4, OUTPUT);
+  pinMode(13,OUTPUT);
   //Sets the speed of steps.
   motor.setSpeed(10);
   //This 1 minute delay allows for the wifi to connect.
@@ -37,27 +40,40 @@ void loop() {
   //Create a process object
   Process p;
   //Run the python script on Linino
-  p.runShellCommand("python /mnt/sda1/arduino/winduino/winduino.py");
-
-  //Wait for script to finish
-  delay(4000);
+  p.begin("python");
+  p.addParameter("/mnt/sda1/arduino/winduino/winduino.py");
+  p.addParameter(prev_windDir);
+  p.run();
 
   //Retrieve variables from the bridge
-  Bridge.get("windDir",windDir,10);
-
-  //Change the string variables to integers
+  Bridge.get("steps",steps,4);
+  Bridge.get("windDir",windDir,4);
+  
+  //Change the string variable to an integer
+  int steps_int = atoi(steps);
   int windDir_int = atoi(windDir);
 
-  //if windDir_int is not -1:
-  if (windDir_int != -1)
+  //if steps_int is not -1 do steps
+  if (steps_int != -1)
   {
-    int tosteps = max(prev_windDir_int  
+     //Turn wand to new direction
+     motor.step(steps_int);
+     //Store wind direction as prev_windDir
+     strcpy(prev_windDir,windDir);
+     //Blink onboard led for 5 seconds
+     digitalWrite(13,HIGH);
+     delay(5000);
+     digitalWrite(13,LOW);
   }
-  //get number of steps to make
-  //do steps
-  //save windDir as previous
-
-  //else if windDir_int is -1:
-  //do shake
-  
+  //if steps_int is -1 shake the wand
+  else
+  {
+    for (int x = 0; x <= 10; x++)
+    {
+      motor.step(50);
+      motor.step(-50);
+    }
+  }
+  //wait 5 minutes
+  delay(300000);
 }

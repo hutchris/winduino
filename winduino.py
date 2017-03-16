@@ -1,3 +1,6 @@
+#!/usr/bin/python2.7
+
+import os
 import sys
 import json
 import time
@@ -7,7 +10,12 @@ import urllib2
 sys.path.insert(0, '/usr/lib/python2.7/bridge/')
 from bridgeclient import BridgeClient
 
-with open("conf.txt","r") as confFile:
+prev_windDir = int(sys.argv[1])
+
+fileDir = os.path.dirname(os.path.realpath(__file__))
+confPath = os.path.join(fileDir,"conf.txt")
+
+with open(confPath,"r") as confFile:
 	conf = json.loads(confFile.read())
 
 apiKey = conf['apiKey']
@@ -28,15 +36,28 @@ while resp != 200 and count < 4:
 		time.sleep(10)
 		count += 1
 
+def numberOfSteps(previous,current):
+	diff = current-previous
+	if abs(diff) > 180:
+		steps = (360 - max(previous,current)) + min(previous,current)
+		if current > previous:
+			steps = steps - (2 * steps)
+	else:
+		steps = diff
+	steps = int(steps * (360.0/512.0))
+	return(steps)
+
 if resp == 200:
 	weatherData = json.loads(urlobj.read())
 	windDir = weatherData['wind']['deg']
+	steps = numberOfSteps(prev_windDir,windDir)
 else:
-	windDir = -1
+	windDir = prev_windDir
+	steps = -1
 
 #creates a bridge object
 bricli = BridgeClient()
 
 #Pass variables to the bridge memory
-bricli.put('windDir',windDir)
-
+bricli.put('steps',str(steps))
+bricli.put('windDir',str(windDir))
