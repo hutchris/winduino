@@ -26,15 +26,15 @@ url = "http://api.openweathermap.org/data/2.5/weather?id={id}&APPID={key}".forma
 resp = -1
 count = 0
 
-while resp != 200 and count < 4:
+while resp != 200 and count < 12:
 	try:
 		urlobj = urllib2.urlopen(url)
 		resp = urlobj.getcode()
 	except:
 		pass
 	if resp != 200:
-		time.sleep(10)
-		count += 1
+		time.sleep(5)
+	count += 1	
 
 def numberOfSteps(previous,current):
 	diff = current-previous

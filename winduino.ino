@@ -9,9 +9,8 @@ int pin3 = 10;
 int pin4 = 9;
 
 //This declares a variable for the value, passed from python
-char steps[4];
-char windDir[4];
-
+char steps[5];
+char windDir[5];
 
 //This declares the variable to hold previous position
 char prev_windDir[4] = "0";
@@ -31,8 +30,6 @@ void setup() {
   pinMode(13,OUTPUT);
   //Sets the speed of steps.
   motor.setSpeed(10);
-  //This 1 minute delay allows for the wifi to connect.
-  delay(60000);
 }
 
 void loop() {
@@ -46,8 +43,8 @@ void loop() {
   p.run();
 
   //Retrieve variables from the bridge
-  Bridge.get("steps",steps,4);
-  Bridge.get("windDir",windDir,4);
+  Bridge.get("steps",steps,5);
+  Bridge.get("windDir",windDir,5);
   
   //Change the string variable to an integer
   int steps_int = atoi(steps);
@@ -65,15 +62,17 @@ void loop() {
      delay(5000);
      digitalWrite(13,LOW);
   }
-  //if steps_int is -1 shake the wand
+  //if steps_int is -1 shake the wand and blink the led
   else
   {
     for (int x = 0; x <= 10; x++)
     {
+      digitalWrite(13,HIGH);
       motor.step(50);
+      digitalWrite(13,LOW);
       motor.step(-50);
     }
   }
-  //wait 5 minutes
-  delay(300000);
+  //wait 1 minute
+  delay(60000);
 }
