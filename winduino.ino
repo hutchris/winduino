@@ -13,7 +13,7 @@ char steps[5];
 char windDir[5];
 
 //This declares the variable to hold previous position
-char prev_windDir[4] = "0";
+char prev_windDir[5] = "0";
 
 //Creates a motor object. Steps per rev, pins.
 Stepper motor(512, pin1, pin2, pin3, pin4);
@@ -48,7 +48,6 @@ void loop() {
   
   //Change the string variable to an integer
   int steps_int = atoi(steps);
-  int windDir_int = atoi(windDir);
 
   //if steps_int is not -1 do steps
   if (steps_int != -1)
