@@ -1,8 +1,6 @@
 # winduino
 Arduino Yun project to display the wind direction on a 3D printed device
 
-Work in process. 
-
 Components:
 
 Files:
@@ -25,4 +23,4 @@ Wiring diagram:
 https://learn.adafruit.com/assets/2495
 
 ![alt tag](/Images/IMG_0589.JPG)
-![alt tag](/Images/IMG_0594.MOV)
+
