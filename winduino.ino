@@ -20,6 +20,7 @@ Stepper motor(512, pin1, pin2, pin3, pin4);
 
 void setup() {
   // put your setup code here, to run once:
+  delay(60000);
   //Initialise bridge process. Needs to be done before python script is run
   Bridge.begin();
   //Set the pins as output
