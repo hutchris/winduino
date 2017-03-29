@@ -24,3 +24,5 @@ Physical:
 Wiring diagram:
 https://learn.adafruit.com/assets/2495
 
+![alt tag](/Images/IMG_0589.JPG)
+![alt tag](/Images/IMG_0594.MOV)
