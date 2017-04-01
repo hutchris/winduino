@@ -60,4 +60,4 @@ bricli = BridgeClient()
 
 #Pass variables to the bridge memory
 bricli.put('steps',str(steps))
-bricli.put('windDir',str(windDir))
+bricli.put('windDir',str(int(windDir)))

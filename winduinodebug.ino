@@ -20,8 +20,13 @@ Stepper motor(512, pin1, pin2, pin3, pin4);
 
 void setup() {
   // put your setup code here, to run once:
-  delay(60000);
+  // initialize serial communication
+  Serial.begin(9600);  
+  while (!Serial);
+  Serial.println("Serial connected...\n");
+  //delay(60000);
   //Initialise bridge process. Needs to be done before python script is run
+  Serial.println("Starting bridge...\n");
   Bridge.begin();
   //Set the pins as output
   pinMode(pin1, OUTPUT);
@@ -36,16 +41,23 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //Create a process object
+  Serial.println("Running script. prev_windDir var is: \n");
+  Serial.println(prev_windDir);
   Process p;
   //Run the python script on Linino
   p.begin("python");
   p.addParameter("/mnt/sda1/arduino/winduino/winduino.py");
   p.addParameter(prev_windDir);
   p.run();
+  Serial.println("Script complete \n");
 
   //Retrieve variables from the bridge
   Bridge.get("steps",steps,5);
   Bridge.get("windDir",windDir,5);
+  Serial.println("steps variable from bridge:\n");
+  Serial.println(steps);
+  Serial.println("windDir variable from bridge:\n");
+  Serial.println(windDir);
   
   //Change the string variable to an integer
   int steps_int = atoi(steps);
@@ -57,6 +69,8 @@ void loop() {
      motor.step(steps_int);
      //Store wind direction as prev_windDir
      strncpy(prev_windDir,windDir,5);
+     Serial.println("strcpy complete. prev_windDir var is now: \n");
+     Serial.println(prev_windDir);
      //Blink onboard led for 5 seconds
      digitalWrite(13,HIGH);
      delay(5000);
